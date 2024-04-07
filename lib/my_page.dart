@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:healthcare/screen/auth/changePassword_screen.dart';
+import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 
 class MyPage extends StatefulWidget{
   const MyPage({Key? key}) : super(key: key);
@@ -8,7 +10,9 @@ class MyPage extends StatefulWidget{
 }
 
 class _MyPageState extends State<MyPage>{
-  final List<Widget> _screens = [
+  final List<Widget> _screen = [
+
+    FogotPasswordScreeen()
   ];
   int _selectedIndex = 0;
 
@@ -27,6 +31,8 @@ class _MyPageState extends State<MyPage>{
         ),
         backgroundColor: Colors.blue,
       ),
+      body: _screen[_selectedIndex],
+
     );
   }
 }
