@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 import 'package:healthcare/screen/auth/register_screen.dart';
+import 'package:healthcare/screen/dashboard.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -170,16 +171,12 @@ class LoginScreen extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => RegisterScreen()),
-                            );
-                          },
                           child: MaterialButton(
                             onPressed: () {
-                              // This onPressed is just a placeholder,
-                              // the actual navigation will happen through GestureDetector
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => RegisterScreen()),
+                              );
                             },
                             color: Color(0xffffffff),
                             elevation: 0,
@@ -208,7 +205,12 @@ class LoginScreen extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: MaterialButton(
-                          onPressed: () {},
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => DashboardScreen()),
+                              );
+                            },
                           color: Color(0xff3a57e8),
                           elevation: 0,
                           shape: RoundedRectangleBorder(

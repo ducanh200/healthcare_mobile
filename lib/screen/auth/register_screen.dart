@@ -1,8 +1,11 @@
 ///File download from FlutterViz- Drag and drop a tools. For more details visit https://flutterviz.io/
 
 import 'package:flutter/material.dart';
+import 'package:healthcare/screen/auth/login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -226,11 +229,49 @@ class RegisterScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.max,
-                  children: [
+                  children:
+                  [Expanded(
+                    flex: 1,
+                    child: MaterialButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => LoginScreen()),
+                        );
+                      },
+                      color: Color(0xffffffff),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12.0),
+                        side: BorderSide(color: Color(0xff9e9e9e), width: 1),
+                      ),
+                      padding: EdgeInsets.all(16),
+                      child: Text(
+                        "Login",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          fontStyle: FontStyle.normal,
+                        ),
+                      ),
+                      textColor: Color(0xff000000),
+                      height: 40,
+                      minWidth: 140,
+                    ),
+                  ),
+
+                    SizedBox(
+                      width: 16,
+                    ),
                     Expanded(
                       flex: 1,
                       child: MaterialButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => RegisterScreen()),
+                          );
+                        },
                         color: Color(0xff3a57e8),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
@@ -246,33 +287,6 @@ class RegisterScreen extends StatelessWidget {
                           ),
                         ),
                         textColor: Color(0xffffffff),
-                        height: 40,
-                        minWidth: 140,
-                      ),
-                    ),
-                    SizedBox(
-                      width: 16,
-                    ),
-                    Expanded(
-                      flex: 1,
-                      child: MaterialButton(
-                        onPressed: () {},
-                        color: Color(0xffffffff),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                          side: BorderSide(color: Color(0xff9e9e9e), width: 1),
-                        ),
-                        padding: EdgeInsets.all(16),
-                        child: Text(
-                          "Login",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
-                        textColor: Color(0xff000000),
                         height: 40,
                         minWidth: 140,
                       ),
