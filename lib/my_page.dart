@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/screen/auth/changePassword_screen.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
+import 'package:healthcare/screen/auth/login_screen.dart';
+import 'package:healthcare/screen/auth/register_screen.dart';
 
 class MyPage extends StatefulWidget{
   const MyPage({Key? key}) : super(key: key);
@@ -11,8 +13,10 @@ class MyPage extends StatefulWidget{
 
 class _MyPageState extends State<MyPage>{
   final List<Widget> _screen = [
-
-    FogotPasswordScreeen()
+    LoginScreen(),
+    ChangePasswordScreen(),
+    FogotPasswordScreeen(),
+    RegisterScreen()
   ];
   int _selectedIndex = 0;
 

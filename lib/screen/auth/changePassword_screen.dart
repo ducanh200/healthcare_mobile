@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:healthcare/screen/auth/login_screen.dart';
 class ChangePasswordScreen extends StatelessWidget{
   const ChangePasswordScreen({super.key});
 
@@ -25,10 +25,18 @@ class ChangePasswordScreen extends StatelessWidget{
             color:Color(0xff000000),
           ),
         ),
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color:Color(0xff212435),
-          size:24,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Color(0xff212435),
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
+          },
         ),
       ),
       body:Padding(
