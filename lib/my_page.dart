@@ -13,29 +13,24 @@ class MyPage extends StatefulWidget{
 }
 
 class _MyPageState extends State<MyPage>{
-  final List<Widget> _screen = [
-    LoginScreen(),
-    ChangePasswordScreen(),
-    FogotPasswordScreeen(),
-    RegisterScreen(),
-    DashboardScreen()
-  ];
   int _selectedIndex = 0;
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    DashboardScreen(),
-    ChangePasswordScreen(),
-    FogotPasswordScreeen(),
-    LoginScreen(),
-    RegisterScreen()
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+  final List<Widget> _screen = [
+    LoginScreen(),
+  ];
+  static const TextStyle optionStyle =
+  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
+  static const List<Widget> _widgetOptions = <Widget>[
+    DashboardScreen(),
+    LoginScreen(),
+    ChangePasswordScreen(),
+    FogotPasswordScreeen(),
+    RegisterScreen()
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -57,9 +52,9 @@ class _MyPageState extends State<MyPage>{
               children: [
                 ListTile(
                   title: const Text('Dashboard'),
-                  selected: _selectedIndex == 0,
+                  selected: _selectedIndex == 1,
                   onTap: () {
-                    _onItemTapped(0);
+                    _onItemTapped(1);
                     Navigator.pop(context);
                   },
                 ),
@@ -72,8 +67,10 @@ class _MyPageState extends State<MyPage>{
                 leading: Icon(Icons.exit_to_app, color: Colors.white), // Icon for logout
                 title: Text('Log Out', style: TextStyle(color: Colors.white)), // Text for logout
                 onTap: () {
-                  _onItemTapped(3);
-                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => LoginScreen()),
+                  );
                 },
               ),
             ),

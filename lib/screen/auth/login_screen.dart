@@ -1,11 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 import 'package:healthcare/screen/auth/register_screen.dart';
 import 'package:healthcare/screen/dashboard.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
+
 
   @override
   Widget build(BuildContext context) {
@@ -205,12 +207,12 @@ class LoginScreen extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: MaterialButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => DashboardScreen()),
-                              );
-                            },
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => MyPage()),
+                            );
+                          },
                           color: Color(0xff3a57e8),
                           elevation: 0,
                           shape: RoundedRectangleBorder(
