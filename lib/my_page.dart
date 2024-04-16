@@ -3,7 +3,7 @@ import 'package:healthcare/screen/auth/changePassword_screen.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 import 'package:healthcare/screen/auth/login_screen.dart';
 import 'package:healthcare/screen/auth/register_screen.dart';
-import 'package:healthcare/screen/dashboard.dart';
+import 'package:healthcare/screen/home/home_screen.dart';
 
 class MyPage extends StatefulWidget{
   const MyPage({Key? key}) : super(key: key);
@@ -25,7 +25,7 @@ class _MyPageState extends State<MyPage>{
   static const TextStyle optionStyle =
   TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
-    DashboardScreen(),
+    HomeScreen(),
     LoginScreen(),
     ChangePasswordScreen(),
     FogotPasswordScreeen(),
