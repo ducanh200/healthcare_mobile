@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:healthcare/model/department.dart';
 
 class DepartmentService {
-  static const String apiUrl = 'http://localhost:8080/api/v3/departments';
+  static const String apiUrl = 'http://10.0.2.2:8080/api/v3/departments';
 
   static Future<List<Department>> fetchDepartments() async {
     try {
@@ -13,6 +13,7 @@ class DepartmentService {
         final List<Department> departments = responseData
             .map((data) => Department.fromJson(data))
             .toList();
+
         return departments;
       } else {
         throw Exception('Failed to load departments');
