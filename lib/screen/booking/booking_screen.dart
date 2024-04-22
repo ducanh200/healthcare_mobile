@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/shift.dart';
 import 'package:healthcare/models/booking.dart';
+import 'package:healthcare/screen/booking/success_screen.dart';
 import 'package:healthcare/services/department_service.dart';
 import 'package:healthcare/services/shift_service.dart';
 import 'package:healthcare/services/booking_service.dart';
@@ -227,6 +228,13 @@ class _BookingScreenState extends State<BookingScreen> {
                     );
 
                     final createdBooking = await BookingService().createBooking(booking);
+                    // Navigate to SuccessScreen and pass the ID of the created booking
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SuccessScreen(bookingId: createdBooking.id ?? 0),
+                      ),
+                    );
                     print('Booking created: $createdBooking');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(

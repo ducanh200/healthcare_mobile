@@ -1,4 +1,5 @@
 class Booking {
+  final int? id; // Sử dụng kiểu dữ liệu optional để id có thể null
   final DateTime bookingAt;
   final int status;
   final String date;
@@ -7,6 +8,7 @@ class Booking {
   final int shiftId;
 
   Booking({
+    this.id, // Đặt id là optional
     required this.bookingAt,
     required this.status,
     required this.date,
@@ -17,6 +19,7 @@ class Booking {
 
   factory Booking.fromJson(Map<String, dynamic> json) {
     return Booking(
+      id: json['id'] as int?, // Lấy id từ JSON, có thể là null
       bookingAt: DateTime.parse(json['bookingAt'] as String),
       status: json['status'] as int,
       date: json['date'] as String,
@@ -27,7 +30,7 @@ class Booking {
   }
 
   Map<String, dynamic> toJson() {
-    return {
+    final Map<String, dynamic> data = {
       'bookingAt': bookingAt.toIso8601String(),
       'status': status,
       'date': date,
@@ -35,5 +38,9 @@ class Booking {
       'departmentId': departmentId,
       'shiftId': shiftId,
     };
+    if (id != null) {
+      data['id'] = id; // Thêm id vào JSON nếu nó không phải là null
+    }
+    return data;
   }
 }
