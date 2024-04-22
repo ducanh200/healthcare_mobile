@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 import 'package:healthcare/screen/auth/register_screen.dart';
-import 'package:healthcare/screen/home/home_screen.dart';
+import 'package:healthcare/screen/booking/department_screen.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
