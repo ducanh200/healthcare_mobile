@@ -11,9 +11,11 @@ class DepartmentScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xffffffff),
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text(
           'Please select the medical department',
           style: TextStyle(fontSize: 20),
+
         ),
         centerTitle: true,
         elevation: 0,

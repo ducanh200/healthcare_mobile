@@ -1,13 +1,53 @@
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
 import 'package:healthcare/screen/auth/register_screen.dart';
-import 'package:healthcare/screen/booking/department_screen.dart';
+import 'package:healthcare/services/auth_service.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
 
+class LoginScreen extends StatefulWidget {
+  const LoginScreen({Key? key}) : super(key: key);
+
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final AuthService _authService = AuthService(); // Khởi tạo đối tượng AuthService
+
+  Future<void> _login(BuildContext context) async {
+    try {
+      // Gọi hàm _login từ AuthService với email và password từ controller
+      await _authService.login(context, _emailController.text, _passwordController.text);
+
+      // Xử lý đăng nhập thành công, chuyển hướng đến trang MyPage
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MyPage()),
+      );
+    } catch (e) {
+      // Xử lý lỗi nếu có
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text('Error'),
+          content: Text('An error occurred while signing in.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('OK'),
+            ),
+          ],
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +63,12 @@ class LoginScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
-                ///***If you have exported images you must have to copy those images in assets/images directory.
                 Image(
                   image: AssetImage("assets/images/register-top-img.png"),
                   height: 90,
                   width: 100,
                   fit: BoxFit.fill,
                 ),
-
-                ///***If you have exported images you must have to copy those images in assets/images directory.
                 Image(
                   image: AssetImage("assets/images/logo.png"),
                   height: 100,
@@ -55,7 +92,7 @@ class LoginScreen extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 16, horizontal: 0),
                   child: TextField(
-                    controller: TextEditingController(text: "john@gmail.com"),
+                    controller: _emailController,
                     obscureText: false,
                     textAlign: TextAlign.start,
                     maxLines: 1,
@@ -68,18 +105,15 @@ class LoginScreen extends StatelessWidget {
                     decoration: InputDecoration(
                       disabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
-                        borderSide:
-                        BorderSide(color: Color(0xff9e9e9e), width: 1),
+                        borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
-                        borderSide:
-                        BorderSide(color: Color(0xff9e9e9e), width: 1),
+                        borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(4.0),
-                        borderSide:
-                        BorderSide(color: Color(0xff9e9e9e), width: 1),
+                        borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                       ),
                       labelText: "Email",
                       labelStyle: TextStyle(
@@ -91,13 +125,12 @@ class LoginScreen extends StatelessWidget {
                       filled: true,
                       fillColor: Color(0x00f2f2f3),
                       isDense: false,
-                      contentPadding:
-                      EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                      contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                     ),
                   ),
                 ),
                 TextField(
-                  controller: TextEditingController(text: "12345678"),
+                  controller: _passwordController,
                   obscureText: true,
                   textAlign: TextAlign.start,
                   maxLines: 1,
@@ -110,18 +143,15 @@ class LoginScreen extends StatelessWidget {
                   decoration: InputDecoration(
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
-                      borderSide:
-                      BorderSide(color: Color(0xff9e9e9e), width: 1),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
-                      borderSide:
-                      BorderSide(color: Color(0xff9e9e9e), width: 1),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4.0),
-                      borderSide:
-                      BorderSide(color: Color(0xff9e9e9e), width: 1),
+                      borderSide: BorderSide(color: Color(0xff9e9e9e), width: 1),
                     ),
                     labelText: "Password",
                     labelStyle: TextStyle(
@@ -133,8 +163,7 @@ class LoginScreen extends StatelessWidget {
                     filled: true,
                     fillColor: Color(0x00f2f2f3),
                     isDense: false,
-                    contentPadding:
-                    EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                    contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
                   ),
                 ),
                 Padding(
@@ -162,7 +191,6 @@ class LoginScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
                 Padding(
                   padding: EdgeInsets.fromLTRB(0, 30, 0, 16),
                   child: Row(
@@ -207,12 +235,7 @@ class LoginScreen extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: MaterialButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => MyPage()),
-                            );
-                          },
+                          onPressed: () => _login(context),  // Gọi hàm _login khi nhấn nút "Login"
                           color: Color(0xff3a57e8),
                           elevation: 0,
                           shape: RoundedRectangleBorder(

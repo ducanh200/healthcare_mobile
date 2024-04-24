@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/boooking_detail.dart';
+import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/booking/department_screen.dart';
 import 'package:healthcare/services/booking_service.dart';
 
@@ -40,9 +41,6 @@ class _SuccessScreenState extends State<SuccessScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Success'),
-      ),
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _bookingDetail != null
@@ -84,14 +82,12 @@ class _SuccessScreenState extends State<SuccessScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Navigate back to DepartmentScreen
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (BuildContext context) => DepartmentScreen()),
-                          (route) => false, // Remove all routes below DepartmentScreen
+                      MaterialPageRoute(builder: (context) => MyPage()),
                     );
                   },
-                  child: Text('Back to Department'),
+                  child: Text('Back to Home'),
                 ),
               ],
             ),
