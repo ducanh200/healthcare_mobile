@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:healthcare/screen/auth/changePassword_screen.dart';
-import 'package:healthcare/screen/auth/fogotPassword_screen.dart';
-import 'package:healthcare/screen/auth/login_screen.dart';
-import 'package:healthcare/screen/auth/register_screen.dart';
+import 'package:healthcare/screen/%20result/%20result_screen.dart';
+import 'package:healthcare/screen/booking/%20booking_history_screen.dart';
 import 'package:healthcare/screen/booking/booking_screen.dart';
-import 'package:healthcare/screen/booking/department_screen.dart';
+import 'package:healthcare/screen/home/home_screen.dart';
+import 'package:healthcare/screen/profile/profile_screen.dart';
 
 
 class MyPage extends StatefulWidget{
@@ -15,72 +14,89 @@ class MyPage extends StatefulWidget{
 }
 
 class _MyPageState extends State<MyPage>{
-  int _selectedIndex = 0;
-  void _onItemTapped(int index) {
+  int _selectedIndex = 2;
+  _changeTab(int index){
     setState(() {
       _selectedIndex = index;
     });
   }
-  final List<Widget> _screen = [
-    LoginScreen(),
-  ];
-  static const TextStyle optionStyle =
-  TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
-  static const List<Widget> _widgetOptions = <Widget>[
-    DepartmentScreen(),
-    LoginScreen(),
-    ChangePasswordScreen(),
-    FogotPasswordScreeen(),
-    RegisterScreen()
+  final List<Widget> _screens = [
+    BookingScreen(),
+    BookingHistoryScreen(),
+    HomeScreen(),
+    ResultScreen(),
+    ProfileScreen()
   ];
 
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       appBar: AppBar(
-        title: const Text("Doccure",
-            style: TextStyle(color: Colors.white)
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Image.asset(
+            "assets/images/logo.png",
+            width: 100,
+            color: Colors.white,
+          ),
         ),
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.blueAccent,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.notifications),
+            color: Colors.white,
+            onPressed: () {
+              // Handle notification icon press
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: _widgetOptions[_selectedIndex],
-      ),
-      drawer: Drawer(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                ListTile(
-                  title: const Text('Dashboard'),
-                  selected: _selectedIndex == 1,
-                  onTap: () {
-                    _onItemTapped(1);
-                    Navigator.pop(context);
-                  },
-                ),
-                SizedBox(height: 16), // Add some space between the last item and logout button
-              ],
+      body: _screens[_selectedIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blueAccent,
+        unselectedItemColor: Colors.black45,
+        onTap: (index) => _changeTab(index),
+        items: [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.calendar_month_outlined,
+              size: _selectedIndex == 0 ? 35.0 : 25.0,
             ),
-            Container(
-              color: Colors.red, // Background color of the logout button
-              child: ListTile(
-                leading: Icon(Icons.exit_to_app, color: Colors.white), // Icon for logout
-                title: Text('Log Out', style: TextStyle(color: Colors.white)), // Text for logout
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => LoginScreen()),
-                  );
-                },
-              ),
+            label: "Booking",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.history,
+              size: _selectedIndex == 1 ? 35.0 : 25.0,
             ),
-          ],
-        ),
+            label: "History",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.home_outlined,
+              size: _selectedIndex == 2 ? 35.0 : 25.0,
+            ),
+            label: "Home",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.assignment_outlined,
+              size: _selectedIndex == 3 ? 35.0 : 25.0,
+            ),
+            label: "Result",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.person_outline,
+              size: _selectedIndex == 4 ? 35.0 : 25.0,
+            ),
+            label: "Profile",
+          ),
+        ],
       ),
-
-
     );
   }
 }
