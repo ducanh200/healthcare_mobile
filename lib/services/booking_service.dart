@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:healthcare/models/booking_list.dart';
 import 'package:healthcare/models/boooking_detail.dart';
 import 'package:http/http.dart' as http;
 import 'package:healthcare/models/booking.dart';
@@ -66,6 +67,23 @@ class BookingService {
     } catch (e) {
       // Nếu có lỗi xảy ra trong quá trình gửi request, in ra thông báo lỗi
       throw Exception('Failed to load booking: $e');
+    }
+  }
+  Future<List<BookingList>> getBookingsByPatientId(int patientId) async {
+    try {
+      final url = Uri.parse('$baseUrl/getByPatientId/$patientId');
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData = json.decode(response.body);
+        final List<BookingList> booking_list = responseData
+            .map((data) =>BookingList.fromJson(data))
+            .toList();
+        return booking_list;
+      } else {
+        throw Exception('Failed to get bookings for patient');
+      }
+    } catch (e) {
+      throw Exception('Failed to get bookings for patient: $e');
     }
   }
 

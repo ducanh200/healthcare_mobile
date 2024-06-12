@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/models/boooking_detail.dart';
 import 'package:healthcare/my_page.dart';
 import 'package:healthcare/services/booking_service.dart';
+import 'package:intl/intl.dart';
 
 class SuccessScreen extends StatefulWidget {
   final int bookingId;
@@ -36,12 +37,16 @@ class _SuccessScreenState extends State<SuccessScreen> {
       });
     }
   }
-
+  String formatDate(String dateStr) {
+    DateTime date = DateTime.parse(dateStr);
+    return DateFormat('dd/MM/yyyy').format(date);
+  }
 
   @override
   Widget build(BuildContext context) {
+    final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
     return Scaffold(
-      backgroundColor: Colors.blue[50],
+      backgroundColor: Colors.blueGrey[50],
       body: _isLoading
           ? Center(child: CircularProgressIndicator())
           : _bookingDetail != null
@@ -73,12 +78,12 @@ class _SuccessScreenState extends State<SuccessScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Booking Detail ID: ${_bookingDetail.id}',
+                      'Booking ID: ${_bookingDetail.id}',
                       style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
                     ),
                     Divider(),
                     Text(
-                      'Patient Name: ${_bookingDetail.patientName}',
+                      'Patient: ${_bookingDetail.patientName}',
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(height: 5),
@@ -96,7 +101,10 @@ class _SuccessScreenState extends State<SuccessScreen> {
                       'Time: ${_bookingDetail.shiftTime} (${_bookingDetail.session})',
                       style: TextStyle(fontSize: 20),
                     ),
-
+                    Text(
+                      'Date Created: ${dateFormat.format(_bookingDetail.bookingAt)}',
+                      style: TextStyle(fontSize: 20),
+                    ),
                   ],
                 ),
               ),
@@ -113,11 +121,11 @@ class _SuccessScreenState extends State<SuccessScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => MyPage()),
+                  MaterialPageRoute(builder: (context) => MyPage(initialIndex: 1)),
                 );
               },
               child: Text(
-                'Back To Home',
+                'Go To The Appointment List',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,

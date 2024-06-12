@@ -34,6 +34,7 @@ class ConfirmationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blueGrey[50],
       appBar: AppBar(
         title: Text(
           'Confirm Information',
@@ -66,7 +67,7 @@ class ConfirmationScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Card(
-                          color: Colors.blue[50],
+                          color: Colors.white,
                           elevation: 4,
                           margin: EdgeInsets.symmetric(vertical: 8),
                           child: Padding(
@@ -91,7 +92,7 @@ class ConfirmationScreen extends StatelessWidget {
                           ),
                         ),
                         Card(
-                          color: Colors.blue[50],
+                          color: Colors.white,
                           elevation: 4,
                           margin: EdgeInsets.symmetric(vertical: 8),
                           child: Padding(

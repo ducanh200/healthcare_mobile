@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           padding: EdgeInsets.all(16),
                           child: Text(
-                            "Login",
+                            "Sign In",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,

@@ -29,7 +29,6 @@ class DepartmentService {
         final List<Department> departments = responseData
             .map((data) => Department.fromJson(data))
             .toList();
-
         return departments;
       } else {
         throw Exception('Failed to load departments');

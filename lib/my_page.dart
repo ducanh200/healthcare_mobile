@@ -1,29 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:healthcare/screen/%20result/%20result_screen.dart';
-import 'package:healthcare/screen/booking/%20booking_history_screen.dart';
+import 'package:healthcare/screen/result/result_screen.dart';
+import 'package:healthcare/screen/booking/appointment_screen.dart';
 import 'package:healthcare/screen/booking/booking_screen.dart';
 import 'package:healthcare/screen/home/home_screen.dart';
 import 'package:healthcare/screen/profile/profile_screen.dart';
 
+class MyPage extends StatefulWidget {
+  final int initialIndex;
 
-class MyPage extends StatefulWidget{
-  const MyPage({Key? key}) : super(key: key);
+  const MyPage({Key? key, this.initialIndex = 2}) : super(key: key);
 
   @override
   _MyPageState createState() => _MyPageState();
 }
 
-class _MyPageState extends State<MyPage>{
-  int _selectedIndex = 2;
-  _changeTab(int index){
+class _MyPageState extends State<MyPage> {
+  late int _selectedIndex;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+  }
+
+  void _changeTab(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
   final List<Widget> _screens = [
-    BookingScreen(),
-    BookingHistoryScreen(),
     HomeScreen(),
+    AppointmentScreen(),
+    BookingScreen(),
     ResultScreen(),
     ProfileScreen()
   ];
@@ -62,24 +71,32 @@ class _MyPageState extends State<MyPage>{
         items: [
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.calendar_month_outlined,
+              Icons.home_outlined,
               size: _selectedIndex == 0 ? 35.0 : 25.0,
             ),
-            label: "Booking",
+            label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.history,
+              Icons.calendar_month_outlined,
               size: _selectedIndex == 1 ? 35.0 : 25.0,
             ),
-            label: "History",
+            label: "Appt",
           ),
           BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-              size: _selectedIndex == 2 ? 35.0 : 25.0,
+            icon: Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blueAccent,
+              ),
+              padding: EdgeInsets.all(6),
+              child: Icon(
+                Icons.add,
+                size: _selectedIndex == 2 ? 35.0 : 25.0,
+                color: Colors.white,
+              ),
             ),
-            label: "Home",
+            label: "Booking",
           ),
           BottomNavigationBarItem(
             icon: Icon(

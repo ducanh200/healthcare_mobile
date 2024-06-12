@@ -4,15 +4,11 @@ import 'package:healthcare/models/shift.dart';
 import 'package:healthcare/screen/booking/confirmation_screen.dart';
 import 'package:healthcare/services/department_service.dart';
 import 'package:healthcare/services/shift_service.dart';
-import 'package:healthcare/services/booking_service.dart';
-
 class BookingScreen extends StatefulWidget {
   const BookingScreen({Key? key}) : super(key: key);
-
   @override
   _BookingScreenState createState() => _BookingScreenState();
 }
-
 class _BookingScreenState extends State<BookingScreen> {
   int activeDay = 0;
   late DateTime? selectedDate;
@@ -20,12 +16,8 @@ class _BookingScreenState extends State<BookingScreen> {
   List<String> dateList = [];
   late List<Shift> shifts = [];
   late DateTime today;
-  late int maxBooking = 0;
   int? selectedDepartmentId;
   bool departmentSelected = false;
-  bool dateVisible = false;
-  bool isNextButtonVisible = true;
-  bool showMaxBookingMessage = false;
   final TextEditingController departmentController = TextEditingController(text: "Select Department");
   final TextEditingController dateController = TextEditingController(text: "Select Date");
   final TextEditingController timeController = TextEditingController(text: "Select Time");
@@ -40,49 +32,20 @@ class _BookingScreenState extends State<BookingScreen> {
     super.initState();
     today = DateTime.now();
     selectedDate = null;
-    _fetchShifts();
-    _fetchMaxBooking();
-    ;
+    _fetchShifts(selectedDate, selectedDepartmentId);
   }
-
-  void _fetchShifts() async {
-    try {
-      final fetchedShifts = await ShiftService.fetchShifts();
-      setState(() {
-        shifts = fetchedShifts;
-      });
-    } catch (e) {
-      print("Error fetching shifts: $e");
-    }
-  }
-
-  void _fetchMaxBooking() async {
-    if (selectedDepartmentId != null) {
+  void _fetchShifts(DateTime? selectedDate, int? selectedDepartmentId) async {
+    if (selectedDate != null && selectedDepartmentId != null) {
       try {
-        final department = await DepartmentService.fetchDepartmentById(selectedDepartmentId!);
+        final fetchedShifts = await ShiftService.fetchShifts(selectedDate, selectedDepartmentId);
         setState(() {
-          maxBooking = department.maxBooking ?? 0;
+          shifts = fetchedShifts;
         });
       } catch (e) {
-        print("Error fetching max booking: $e");
+        print("Error fetching shifts: $e");
       }
     }
   }
-
-  Future<void> _checkBookingCount(String time, int shiftId) async {
-    if (selectedDepartmentId != null) {
-      final bookingCountForCurrentDepartment = await BookingService()
-          .getBookingCountForDepartment(selectedDate!, selectedDepartmentId!, shiftId);
-      final totalBookings = bookingCountForCurrentDepartment + 1;
-
-      setState(() {
-        isNextButtonVisible = totalBookings <= maxBooking;
-        showMaxBookingMessage = !isNextButtonVisible;
-      });
-    }
-  }
-
-
   List<Widget> _buildTimeSlots(String session) {
     List<Widget> timeSlots = [];
     for (var shift in shifts) {
@@ -90,7 +53,6 @@ class _BookingScreenState extends State<BookingScreen> {
         timeSlots.add(
           GestureDetector(
             onTap: () async {
-              await _checkBookingCount(shift.time, shift.id);
               _selectTime(shift.time);
             },
             child: Container(
@@ -115,16 +77,10 @@ class _BookingScreenState extends State<BookingScreen> {
     }
     return timeSlots;
   }
-
   void _navigateToConfirmation() async {
     if (canProceedToConfirmation()) {
       final department = await DepartmentService.fetchDepartmentById(selectedDepartmentId!);
       final selectedShift = shifts.firstWhere((shift) => shift.time.contains(activeTiming!));
-      final bookingCountForCurrentDepartment =
-      await BookingService().getBookingCountForDepartment(selectedDate!, selectedDepartmentId!, selectedShift.id);
-      final totalBookings = bookingCountForCurrentDepartment + 1;
-
-      if (totalBookings <= maxBooking) {
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -138,9 +94,6 @@ class _BookingScreenState extends State<BookingScreen> {
             ),
           ),
         );
-      } else {
-        _showSnackbar('Maximum booking limit reached for this department, time slot, and date.');
-      }
     } else {
       String message;
       if (selectedDepartmentId == null) {
@@ -155,13 +108,11 @@ class _BookingScreenState extends State<BookingScreen> {
       _showSnackbar(message);
     }
   }
-
   void _showSnackbar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(message)),
     );
   }
-
   void _showTimePickerBottomSheet() {
     if (selectedDepartmentId != null ) {
       if (selectedDate != null ) {
@@ -211,7 +162,6 @@ class _BookingScreenState extends State<BookingScreen> {
       );
     }
   }
-
   void _selectTime(String selectedTime) {
     setState(() {
       activeTiming = selectedTime;
@@ -237,7 +187,6 @@ class _BookingScreenState extends State<BookingScreen> {
                 return departments.where((department) =>
                     department.name!.toLowerCase().contains(keyword.toLowerCase())).toList();
               }
-
               return FutureBuilder<List<Department>>(
                 future: DepartmentService.fetchDepartments(),
                 builder: (context, snapshot) {
@@ -280,14 +229,11 @@ class _BookingScreenState extends State<BookingScreen> {
                                     setState(() {
                                       selectedDepartmentId = department.id;
                                       departmentController.text = department.name ?? 'Unknown';
-                                      _fetchMaxBooking();
                                       selectedDate = null;
                                       dateController.text = "Select Date";
                                       activeTiming = null;
                                       departmentSelected = true;
                                       timeController.text = "Select Time";
-                                      isNextButtonVisible = true;
-                                      showMaxBookingMessage = false;
                                     });
                                     Navigator.pop(context);
                                   },
@@ -343,13 +289,8 @@ class _BookingScreenState extends State<BookingScreen> {
       },
     );
   }
-
-
-
   @override
   Widget build(BuildContext context) {
-    Color nextButtonColor = canProceedToConfirmation() ? Colors.blueAccent : Colors.white54;
-    Color nextButtonTextColor = canProceedToConfirmation() ? Colors.white : Colors.black38;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -365,7 +306,6 @@ class _BookingScreenState extends State<BookingScreen> {
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -440,8 +380,7 @@ class _BookingScreenState extends State<BookingScreen> {
                         dateController.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
                         activeTiming = null;
                         timeController.text = "Select Time";
-                        isNextButtonVisible = true;
-                        showMaxBookingMessage = false;
+                        _fetchShifts(selectedDate, selectedDepartmentId);
                       });
                     }
                   } else {
@@ -474,7 +413,6 @@ class _BookingScreenState extends State<BookingScreen> {
                   ),
                 ),
               ),
-
               SizedBox(height: 24),
               Text(
                 'Time',
@@ -510,20 +448,12 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
               ),
               SizedBox(height: 24),
-              if (showMaxBookingMessage)
-                Center(
-                  child: Text(
-                    'Maximum booking limit reached for this department, time slot, and date.',
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              if (isNextButtonVisible)
                 Center(
                   child: SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: nextButtonColor,
+                        backgroundColor: Colors.blueAccent,
                         padding: EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8),
@@ -534,14 +464,12 @@ class _BookingScreenState extends State<BookingScreen> {
                         'Next',
                         style: TextStyle(
                           fontSize: 16,
-                          color: nextButtonTextColor,
+                          color: Colors.white,
                         ),
                       ),
                     ),
                   ),
                 ),
-
-
             ],
           ),
         ),
