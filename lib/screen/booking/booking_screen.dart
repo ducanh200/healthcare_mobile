@@ -34,6 +34,9 @@ class _BookingScreenState extends State<BookingScreen> {
     selectedDate = null;
     _fetchShifts(selectedDate, selectedDepartmentId);
   }
+  void _color() async {
+        setState((){});
+  }
   void _fetchShifts(DateTime? selectedDate, int? selectedDepartmentId) async {
     if (selectedDate != null && selectedDepartmentId != null) {
       try {
@@ -234,6 +237,7 @@ class _BookingScreenState extends State<BookingScreen> {
                                       activeTiming = null;
                                       departmentSelected = true;
                                       timeController.text = "Select Time";
+                                      _color();
                                     });
                                     Navigator.pop(context);
                                   },
@@ -362,7 +366,7 @@ class _BookingScreenState extends State<BookingScreen> {
                         return Theme(
                           data: ThemeData.light().copyWith(
                             colorScheme: ColorScheme.light(
-                              primary: Colors.lightBlueAccent,
+                              primary: Colors.blueAccent,
                               onPrimary: Colors.white,
                               surface: Colors.white,
                               onSurface: Colors.black,
