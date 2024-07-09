@@ -53,16 +53,19 @@ class _BookingScreenState extends State<BookingScreen> {
     List<Widget> timeSlots = [];
     for (var shift in shifts) {
       if (shift.session.toLowerCase() == session.toLowerCase()) {
+        bool isActive = shift.status != 1;
         timeSlots.add(
           GestureDetector(
-            onTap: () async {
+            onTap: isActive
+                ? () async {
               _selectTime(shift.time);
-            },
+            }
+                : null,
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               margin: EdgeInsets.only(right: 8, bottom: 8),
               decoration: BoxDecoration(
-                color: activeTiming == shift.time ? Colors.blue : Colors.blue[50],
+                color: activeTiming == shift.time ? Colors.blue : isActive ? Colors.blue[50] : Colors.grey[300],
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
@@ -70,7 +73,7 @@ class _BookingScreenState extends State<BookingScreen> {
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: activeTiming == shift.time ? Colors.white : Colors.black,
+                  color: activeTiming == shift.time ? Colors.white : isActive ? Colors.black : Colors.grey,
                 ),
               ),
             ),
@@ -80,6 +83,7 @@ class _BookingScreenState extends State<BookingScreen> {
     }
     return timeSlots;
   }
+
   void _navigateToConfirmation() async {
     if (canProceedToConfirmation()) {
       final department = await DepartmentService.fetchDepartmentById(selectedDepartmentId!);
