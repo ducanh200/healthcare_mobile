@@ -3,6 +3,7 @@ import 'package:healthcare/models/booking.dart';
 import 'package:healthcare/screen/booking/success_screen.dart';
 import 'package:healthcare/services/booking_service.dart';
 import 'package:healthcare/services/auth_service.dart';
+import 'package:healthcare/services/email_service.dart';
 import 'package:healthcare/services/department_service.dart';
 import 'package:intl/intl.dart';
 class ConfirmationScreen extends StatelessWidget {
@@ -162,6 +163,24 @@ class ConfirmationScreen extends StatelessWidget {
                       ),
                     );
                     print('Booking created: $createdBooking');
+                    final emailService = EmailService();
+                    final emailSubject = 'Notification of successful Booking ID: ${createdBooking.id}';
+                    final emailBody =  '''
+                      Dear ${patientInfo['name']},
+
+                      Your booking has been successfully confirmed. Below are the details of your booking:
+
+                      Department: $DepartmentName
+                      Date: $Date
+                      Time: $Time ($Session)
+
+                      Thank you for choosing our service. We look forward to seeing you!
+
+                      Best regards,
+                      Your Healthcare Team
+                    ''';
+
+                    await emailService.sendBookingConfirmationEmail(patientInfo['email'], emailSubject, emailBody);
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Another user booked this department, time frame, and date during your confirmation.')),

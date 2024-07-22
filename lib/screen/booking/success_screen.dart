@@ -3,6 +3,7 @@ import 'package:healthcare/models/boooking_detail.dart';
 import 'package:healthcare/my_page.dart';
 import 'package:healthcare/services/booking_service.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SuccessScreen extends StatefulWidget {
   final int bookingId;
@@ -40,6 +41,25 @@ class _SuccessScreenState extends State<SuccessScreen> {
   String formatDate(String dateStr) {
     DateTime date = DateTime.parse(dateStr);
     return DateFormat('dd/MM/yyyy').format(date);
+  }
+  String generateGoogleCalendarLink(String date, String time, String departmentName) {
+    String formattedDateTime = '$date $time';
+    DateTime startDateTime = DateTime.parse(formattedDateTime);
+    DateTime endDateTime = startDateTime.add(Duration(minutes: 30));
+
+    String formattedStartDateTime = DateFormat('yyyyMMddTHHmmss').format(startDateTime.toUtc());
+    String formattedEndDateTime = DateFormat('yyyyMMddTHHmmss').format(endDateTime.toUtc());
+
+    String googleCalendarUrl =
+        'https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${formattedStartDateTime}Z/${formattedEndDateTime}Z&details=Doccure+Appointment&location=${Uri.encodeComponent(departmentName)}&text=${Uri.encodeComponent(departmentName)}+medical+Appointment';
+
+    return googleCalendarUrl;
+  }
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override
@@ -126,6 +146,31 @@ class _SuccessScreenState extends State<SuccessScreen> {
               },
               child: Text(
                 'Go To The Appointment List',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              onPressed: () {
+                final googleCalendarLink = generateGoogleCalendarLink(
+                  _bookingDetail!.date,
+                  _bookingDetail!.shiftTime,
+                  _bookingDetail!.departmentName,
+                );
+                _launchURL(googleCalendarLink);
+              },
+              child: Text(
+                'Add to Google Calendar',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white,
