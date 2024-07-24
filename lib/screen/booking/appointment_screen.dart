@@ -164,7 +164,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                 padding: EdgeInsets.symmetric(vertical: 8),
               ),
               child: Text(
-                'Detail',
+                'View',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

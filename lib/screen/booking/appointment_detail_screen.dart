@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/models/boooking_detail.dart';
 import 'package:healthcare/services/booking_service.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class AppointmentDetailScreen extends StatelessWidget {
   final int bookingId;
@@ -83,10 +84,37 @@ class AppointmentDetailScreen extends StatelessWidget {
                   Divider(height: 50, thickness: 2),
                   _buildDetailRow('Date', '${bookingDetail.date}'),
                   Divider(height: 50, thickness: 2),
-                  _buildDetailRow('Time', '${bookingDetail.shiftTime}(${bookingDetail.session})'),
+                  _buildDetailRow('Time', '${bookingDetail.shiftTime} (${bookingDetail.session})'),
                   Divider(height: 50, thickness: 2),
                   _buildDetailRow('Status', '${bookingDetail.getStatusText()}'),
-
+                  Spacer(),
+                  if (bookingDetail.getStatusText() == 'BOOKED')
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0), // Adjust vertical padding as needed
+                      child: Center(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30), // Adjust horizontal padding for button width
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          onPressed: () {
+                            final googleCalendarLink = _generateGoogleCalendarLink(
+                              bookingDetail.date as String,
+                              bookingDetail.shiftTime,
+                              bookingDetail.departmentName,
+                            );
+                            _launchURL(googleCalendarLink);
+                          },
+                          child: Text(
+                            'Add to Google Calendar',
+                            style: TextStyle(fontSize: 16, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
             )
@@ -117,5 +145,26 @@ class AppointmentDetailScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String _generateGoogleCalendarLink(String date, String time, String departmentName) {
+    String formattedDateTime = '$date $time';
+    DateTime startDateTime = DateTime.parse(formattedDateTime);
+    DateTime endDateTime = startDateTime.add(Duration(minutes: 30));
+
+    String formattedStartDateTime = DateFormat('yyyyMMddTHHmmss').format(startDateTime.toUtc());
+    String formattedEndDateTime = DateFormat('yyyyMMddTHHmmss').format(endDateTime.toUtc());
+
+    String googleCalendarUrl =
+        'https://calendar.google.com/calendar/render?action=TEMPLATE&dates=${formattedStartDateTime}Z/${formattedEndDateTime}Z&details=Doccure+Appointment&location=${Uri.encodeComponent(departmentName)}&text=${Uri.encodeComponent(departmentName)}+medical+Appointment';
+
+    return googleCalendarUrl;
+  }
+
+  Future<void> _launchURL(String url) async {
+    final Uri uri = Uri.parse(url);
+    if (!await launchUrl(uri)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }

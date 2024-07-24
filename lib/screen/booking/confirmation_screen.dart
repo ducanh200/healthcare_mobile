@@ -33,6 +33,7 @@ class ConfirmationScreen extends StatelessWidget {
     return DateFormat('dd/MM/yyyy').format(date);
   }
   @override
+  final DateFormat dateFormat = DateFormat('dd/MM/yyyy');
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.blueGrey[50],
@@ -67,6 +68,49 @@ class ConfirmationScreen extends StatelessWidget {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(height: 30), // Add some spacing
+                        Text(
+                          'Please review the information above carefully before proceeding with the booking.',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.blueAccent,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: 30),
+                        Card(
+                          color: Colors.white,
+                          elevation: 4,
+                          margin: EdgeInsets.symmetric(vertical: 8),
+                          child: Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Appointment Detail',
+                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                ),
+                                Divider(),
+                                Text(
+                                  'Department: $DepartmentName',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Date: ${formatDate(Date)}',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'Time: $Time ($Session)',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         Card(
                           color: Colors.white,
                           elevation: 4,
@@ -88,38 +132,6 @@ class ConfirmationScreen extends StatelessWidget {
                                 Text('Phone Number: ${snapshot.data!['phonenumber']}',style: TextStyle(fontSize: 16),),
                                 Text('Address: ${snapshot.data!['address']}',style: TextStyle(fontSize: 16),),
                                 Text('City: ${snapshot.data!['city']}',style: TextStyle(fontSize: 16),),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Card(
-                          color: Colors.white,
-                          elevation: 4,
-                          margin: EdgeInsets.symmetric(vertical: 8),
-                          child: Padding(
-                            padding: const EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'Appointment Detail',
-                                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                                ),
-                                Divider(),
-                                Text(
-                                  'Department: $DepartmentName',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Date: $Date',
-                                  style: TextStyle(fontSize: 16),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Time: $Time ($Session)',
-                                  style: TextStyle(fontSize: 16),
-                                ),
                               ],
                             ),
                           ),
@@ -171,8 +183,10 @@ class ConfirmationScreen extends StatelessWidget {
                       Your booking has been successfully confirmed. Below are the details of your booking:
 
                       Department: $DepartmentName
-                      Date: $Date
+                      Date: ${formatDate(Date)}
                       Time: $Time ($Session)
+                                     
+                      Date Created: ${dateFormat.format(createdBooking.bookingAt)}
 
                       Thank you for choosing our service. We look forward to seeing you!
 
@@ -191,7 +205,7 @@ class ConfirmationScreen extends StatelessWidget {
                 }
               },
               child: Text(
-                'Confirm Booking',
+                'Booking',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 16,

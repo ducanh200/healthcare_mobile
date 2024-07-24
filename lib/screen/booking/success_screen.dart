@@ -83,7 +83,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
             SizedBox(height: 20),
             Text(
               'Booking successful!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.blueAccent,),
             ),
             SizedBox(height: 20),
             Card(
@@ -113,7 +113,7 @@ class _SuccessScreenState extends State<SuccessScreen> {
                     ),
                     SizedBox(height: 5),
                     Text(
-                      'Date: ${_bookingDetail.date}',
+                      'Date: ${formatDate(_bookingDetail.date)}',
                       style: TextStyle(fontSize: 20),
                     ),
                     SizedBox(height: 5),
@@ -130,53 +130,60 @@ class _SuccessScreenState extends State<SuccessScreen> {
               ),
             ),
             SizedBox(height: 40),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.blueAccent,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch, // Ensures buttons stretch to full width
+              children: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MyPage(initialIndex: 1)),
+                    );
+                  },
+                  child: Text(
+                    'Go To The Appointment List',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyPage(initialIndex: 1)),
-                );
-              },
-              child: Text(
-                'Go To The Appointment List',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
+                SizedBox(height: 20), // Adds space between buttons
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                  ),
+                  onPressed: () {
+                    final googleCalendarLink = generateGoogleCalendarLink(
+                      _bookingDetail!.date,
+                      _bookingDetail!.shiftTime,
+                      _bookingDetail!.departmentName,
+                    );
+                    _launchURL(googleCalendarLink);
+                  },
+                  child: Text(
+                    'Add to Google Calendar',
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding: EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              onPressed: () {
-                final googleCalendarLink = generateGoogleCalendarLink(
-                  _bookingDetail!.date,
-                  _bookingDetail!.shiftTime,
-                  _bookingDetail!.departmentName,
-                );
-                _launchURL(googleCalendarLink);
-              },
-              child: Text(
-                'Add to Google Calendar',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.white,
-                ),
-              ),
-            ),
+              ],
+            )
+
+
           ],
         ),
       )
