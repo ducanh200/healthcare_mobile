@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'package:healthcare/models/booking_list.dart';
-import 'package:healthcare/models/boooking_detail.dart';
+import 'package:healthcare/models/result_detail.dart';
 import 'package:healthcare/models/result_list.dart';
 import 'package:http/http.dart' as http;
-import 'package:healthcare/models/booking.dart';
 
 class ResultService {
   final String baseUrl = 'http://10.0.2.2:8080/api/v3/results';
@@ -24,5 +22,20 @@ class ResultService {
       throw Exception('Failed to get results for patient: $e');
     }
   }
+  static Future<ResultDetail> getResultById(int id) async {
+    final url = Uri.parse('http://10.0.2.2:8080/api/v3/results/findById/$id');
 
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        final resultDetail = ResultDetail.fromJson((jsonData));
+        return resultDetail;
+      } else {
+        throw Exception('Failed to load result');
+      }
+    } catch (e) {
+      throw Exception('Failed to load result: $e');
+    }
+  }
 }

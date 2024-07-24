@@ -47,25 +47,18 @@ class BookingService {
     }
   }
   static Future<BookingDetail> getBookingById(int id) async {
-    // Tạo URL endpoint với ID của booking
     final url = Uri.parse('http://10.0.2.2:8080/api/v3/bookings/$id');
 
     try {
-      // Gửi request HTTP để lấy thông tin của booking từ server
       final response = await http.get(url);
-
-      // Kiểm tra status code của response
       if (response.statusCode == 200) {
-        // Nếu request thành công, chuyển đổi dữ liệu JSON nhận được thành đối tượng Booking
         final jsonData = json.decode(response.body);
         final bookingDetail = BookingDetail.fromJson((jsonData));
         return bookingDetail;
       } else {
-        // Nếu request không thành công, in ra thông báo lỗi
         throw Exception('Failed to load booking');
       }
     } catch (e) {
-      // Nếu có lỗi xảy ra trong quá trình gửi request, in ra thông báo lỗi
       throw Exception('Failed to load booking: $e');
     }
   }

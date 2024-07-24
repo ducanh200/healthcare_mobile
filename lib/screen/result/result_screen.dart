@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/models/department.dart';
 import 'package:healthcare/models/result_list.dart';
 import 'package:healthcare/screen/booking/appointment_detail_screen.dart';
+import 'package:healthcare/screen/result/result_detail.dart';
 import 'package:healthcare/services/department_service.dart';
 import 'package:healthcare/services/result_sevice.dart';
 import 'package:intl/intl.dart';
@@ -39,14 +40,14 @@ class _ResultScreenState extends State<ResultScreen> {
       // Error handling is already done in the getProfile method
     }
   }
-  // void _navigateToBookingDetail(int bookingId) {
-  //   Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //       builder: (context) => AppointmentDetailScreen(ResultId: ResultId),
-  //     ),
-  //   );
-  // }
+  void _navigateToBookingDetail(int ResultId) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ResultDetailScreen(resultId: ResultId),
+      ),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -99,9 +100,9 @@ class _ResultScreenState extends State<ResultScreen> {
 
   Widget _buildResultItem(BuildContext context, ResultList result) {
     DateFormat dateFormat = DateFormat('dd/MM/yyyy');
-    String formattedDate = dateFormat.format(result.consultingday);
+    String formattedDate = dateFormat.format(result.examinationday);
     DateTime currentDate = DateTime.now();
-    DateTime resultDate = DateTime(result.consultingday.year, result.consultingday.month, result.consultingday.day);
+    DateTime resultDate = DateTime(result.examinationday.year, result.examinationday.month, result.examinationday.day);
     DateTime today = DateTime(currentDate.year, currentDate.month, currentDate.day);
     DateTime yesterday = today.subtract(Duration(days: 1));
     String daysAgoText = resultDate == today
@@ -194,7 +195,7 @@ class _ResultScreenState extends State<ResultScreen> {
                   Center(
                     child: ElevatedButton(
                       onPressed: () {
-                        // _navigateToBookingDetail(result.id);
+                        _navigateToBookingDetail(result.id);
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.blueAccent,
