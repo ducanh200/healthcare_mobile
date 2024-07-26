@@ -7,8 +7,6 @@ class ResultDetail {
   final String diagnoseEnd;
   final int bookingId;
   final DateTime examinationday;
-  final int departmentId;
-  final int doctorId;
   final String doctorName;
   final String doctorEmail;
   final String doctorPhone;
@@ -21,8 +19,6 @@ class ResultDetail {
     required this.diagnoseEnd,
     required this.bookingId,
     required this.examinationday,
-    required this.departmentId,
-    required this.doctorId,
     required this.doctorName,
     required this.doctorEmail,
     required this.doctorPhone
@@ -36,8 +32,6 @@ class ResultDetail {
       diagnoseEnd: json['diagnoseEnd'] as String,
       bookingId: json['booking']['id'] as int,
       examinationday: DateTime.parse(json['booking']['date'] as String),
-      departmentId: json['booking']['departmentId'] as int,
-      doctorId: json['doctor']['id'] as int,
       doctorName: json['doctor']['name'] as String,
       doctorEmail: json['doctor']['email'] as String,
       doctorPhone: json['doctor']['phonenumber'] as String,

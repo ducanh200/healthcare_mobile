@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/auth/login_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:healthcare/Provider/authToken_provider.dart';
