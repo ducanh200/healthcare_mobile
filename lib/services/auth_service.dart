@@ -51,7 +51,7 @@ class AuthService {
       );
 
       if (response.statusCode == 200) {
-        var jsonResponse = json.decode(response.body);
+        var jsonResponse = json.decode(utf8.decode(response.bodyBytes));
         return jsonResponse;
       } else {
         throw Exception('Failed to load profile. Status code: ${response.statusCode}');
