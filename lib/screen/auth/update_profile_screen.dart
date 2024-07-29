@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:healthcare/services/auth_service.dart';
 import 'package:intl/intl.dart';
 
-class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({super.key});
+class UpdateProfileScreen extends StatefulWidget {
+  final Map<String, dynamic> profileData;
+
+  const UpdateProfileScreen({super.key, required this.profileData});
 
   @override
-  _RegisterScreenState createState() => _RegisterScreenState();
+  _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
 }
 
-class _RegisterScreenState extends State<RegisterScreen> {
+class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   late TextEditingController _nameController;
-  late TextEditingController _emailController;
-  late TextEditingController _passwordController;
   late TextEditingController _birthdayController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _addressController;
@@ -22,38 +22,38 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController();
-    _emailController = TextEditingController();
-    _passwordController = TextEditingController();
-    _birthdayController = TextEditingController();
-    _phoneNumberController = TextEditingController();
-    _addressController = TextEditingController();
-    _cityController = TextEditingController();
+    _nameController = TextEditingController(text: widget.profileData['name']);
+    _gender = widget.profileData['gender'];
+    _birthdayController = TextEditingController(text: DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.profileData['birthday'])));
+    _phoneNumberController = TextEditingController(text: widget.profileData['phonenumber']);
+    _addressController = TextEditingController(text: widget.profileData['address']);
+    _cityController = TextEditingController(text: widget.profileData['city']);
   }
 
-  Future<void> _register() async {
+  Future<void> _updateProfile() async {
     AuthService authService = AuthService();
     try {
-      await authService.register(
-        context: context,
-        name: _nameController.text,
-        email: _emailController.text,
-        password: _passwordController.text,
-        gender: _gender,
-        birthday: DateFormat('yyyy-MM-dd').format(DateFormat('dd/MM/yyyy').parse(_birthdayController.text)),
-        phoneNumber: _phoneNumberController.text,
-        address: _addressController.text,
-        city: _cityController.text,
+      await authService.updateProfile(
+        context,
+        {
+          'profileId': widget.profileData['id'].toString(),
+          'name': _nameController.text,
+          'gender': _gender,
+          'birthday': DateFormat('yyyy-MM-dd').format(DateFormat('dd/MM/yyyy').parse(_birthdayController.text)),
+          'phonenumber': _phoneNumberController.text,
+          'address': _addressController.text,
+          'city': _cityController.text,
+        },
       );
     } catch (e) {
-      // Error handling is done in the register method
+      // Error handling is done in the updateProfile method
     }
-    }
+  }
 
   Future<void> _selectDate(BuildContext context) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime(2000),
+      initialDate: DateFormat('dd/MM/yyyy').parse(_birthdayController.text),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.zero,
         ),
         title: Text(
-          "Register",
+          "Update Profile",
           style: TextStyle(
             fontWeight: FontWeight.w700,
             fontStyle: FontStyle.normal,
@@ -126,84 +126,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   decoration: InputDecoration(
                     labelText: 'Name',
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                child: TextField(
-                  controller: _emailController,
-                  obscureText: false,
-                  textAlign: TextAlign.start,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 14,
-                    color: Color(0xff000000),
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    disabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30.0),
-                      borderSide: BorderSide(
-                        color: Color(0xff696767),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
-                child: TextField(
-                  controller: _passwordController,
-                  obscureText: true,
-                  textAlign: TextAlign.start,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontStyle: FontStyle.normal,
-                    fontSize: 14,
-                    color: Color(0xff000000),
-                  ),
-                  decoration: InputDecoration(
-                    labelText: 'Password',
                     disabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(
@@ -427,38 +349,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                height: 24,
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 20),
-                width: double.infinity,
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 0),
                 child: ElevatedButton(
-                  onPressed: _register,
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Color(0xff3a57e8)),
-                    shape: MaterialStateProperty.all(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                    ),
+                  onPressed: _updateProfile,
+                  child: Text(
+                    'Update Profile',
+                    style: TextStyle(color: Colors.white),
                   ),
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
-                    child: Text(
-                      'Register',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontStyle: FontStyle.normal,
-                        fontSize: 18,
-                        color: Color(0xffffffff),
-                      ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.blueAccent,
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
                     ),
+                    minimumSize: Size.fromHeight(50),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: 24,
               ),
             ],
           ),

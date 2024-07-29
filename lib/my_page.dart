@@ -8,7 +8,7 @@ import 'package:healthcare/screen/profile/profile_screen.dart';
 class MyPage extends StatefulWidget {
   final int initialIndex;
 
-  const MyPage({Key? key, this.initialIndex = 2}) : super(key: key);
+  const MyPage({Key? key, this.initialIndex = 0}) : super(key: key);
 
   @override
   _MyPageState createState() => _MyPageState();
@@ -51,15 +51,6 @@ class _MyPageState extends State<MyPage> {
           ),
         ),
         backgroundColor: Colors.blueAccent,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.notifications),
-            color: Colors.white,
-            onPressed: () {
-              // Handle notification icon press
-            },
-          ),
-        ],
       ),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(

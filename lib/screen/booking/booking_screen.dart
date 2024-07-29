@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/department.dart';
 import 'package:healthcare/models/shift.dart';
+import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/booking/confirmation_screen.dart';
+import 'package:healthcare/screen/home/home_screen.dart';
 import 'package:healthcare/services/department_service.dart';
 import 'package:healthcare/services/shift_service.dart';
 class BookingScreen extends StatefulWidget {
@@ -180,7 +182,7 @@ class _BookingScreenState extends State<BookingScreen> {
                     SizedBox(height: 24),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: ['Morning', 'Afternoon', 'Evening'].map((session) {
+                      children: ['Morning', 'Afternoon'].map((session) {
                         return Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -243,10 +245,6 @@ class _BookingScreenState extends State<BookingScreen> {
             builder: (BuildContext context, StateSetter setState) {
               String searchKeyword = '';
 
-              List<Department> _searchDepartments(String keyword, List<Department> departments) {
-                return departments.where((department) =>
-                    department.name!.toLowerCase().contains(keyword.toLowerCase())).toList();
-              }
               return FutureBuilder<List<Department>>(
                 future: DepartmentService.fetchDepartments(),
                 builder: (context, snapshot) {
@@ -256,26 +254,9 @@ class _BookingScreenState extends State<BookingScreen> {
                     return Center(child: Text('Error: ${snapshot.error}'));
                   } else {
                     List<Department> departments = snapshot.data!;
-                    if (searchKeyword.isNotEmpty) {
-                      departments = _searchDepartments(searchKeyword, departments);
-                    }
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          child: TextField(
-                            decoration: InputDecoration(
-                              hintText: 'Search by department name',
-                              prefixIcon: Icon(Icons.search),
-                            ),
-                            onChanged: (value) {
-                              setState(() {
-                                searchKeyword = value;
-                              });
-                            },
-                          ),
-                        ),
                         Expanded(
                           child: ListView.builder(
                             itemCount: departments.length,
@@ -354,11 +335,11 @@ class _BookingScreenState extends State<BookingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Text(
           'Select medical examination information',
           style: TextStyle(
-            fontSize: 17,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
             color: Colors.white,
             letterSpacing: 1.2,
@@ -366,6 +347,15 @@ class _BookingScreenState extends State<BookingScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyPage()),
+            );
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

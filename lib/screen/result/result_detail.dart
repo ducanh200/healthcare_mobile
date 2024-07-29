@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -90,12 +89,12 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
+                              backgroundColor: _viewType == 'detail' ? Colors.blueAccent : Colors.white,
                             ),
                             child: Text(
                               'Detail',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: _viewType == 'detail' ? Colors.white : Colors.blueAccent,
                                 fontSize: 16,
                               ),
                             ),
@@ -113,12 +112,12 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
+                              backgroundColor: _viewType == 'test' ? Colors.blueAccent : Colors.white,
                             ),
                             child: Text(
                               'List Test',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: _viewType == 'test' ? Colors.white : Colors.blueAccent,
                                 fontSize: 16,
                               ),
                             ),
@@ -136,12 +135,12 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                               });
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.blueAccent,
+                              backgroundColor: _viewType == 'medicine' ? Colors.blueAccent : Colors.white,
                             ),
                             child: Text(
                               'Medicine',
                               style: TextStyle(
-                                color: Colors.white,
+                                color: _viewType == 'medicine' ? Colors.white : Colors.blueAccent,
                                 fontSize: 16,
                               ),
                             ),
@@ -193,7 +192,7 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                             _buildDetailRow('Phone', '${resultDetail.doctorPhone}'),
                             _buildDetailRow('Email', '${resultDetail.doctorEmail}'),
                             Divider(thickness: 1, color: Colors.grey[300]),
-                            _buildDetailRow('Expense', '\$${NumberFormat('#,##0').format(resultDetail.expense)}'),
+                            _buildDetailRow('Total Expense', '\$${NumberFormat('#,##0').format(resultDetail.expense)}'),
                           ],
                         ),
                       ),
@@ -239,20 +238,6 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                                         child: Image.network(test.thumbnail),
                                       ),
                                       SizedBox(height: 16),
-                                      Center(
-                                        child: ElevatedButton(
-                                          onPressed: () {
-                                            downloadImage(test.thumbnail, 'test_image_${index + 1}.jpg');
-                                          },
-                                          child: Text(
-                                            'Download Image',
-                                            style: TextStyle(
-                                              color: Colors.blueAccent,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      SizedBox(height: 8),
                                       _buildDetailRow('Diagnose', test.diagnose),
                                       _buildDetailRow('Device', test.deviceName),
                                       _buildDetailRow('Expense', '\$${NumberFormat('#,##0').format(test.expense)}'),

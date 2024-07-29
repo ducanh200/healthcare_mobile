@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Sign In",
+                    "Login",
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.clip,
                     style: TextStyle(
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         );
                       },
                       child: Text(
-                        "Forgot Password ?",
+                        "",
                         textAlign: TextAlign.start,
                         overflow: TextOverflow.clip,
                         style: TextStyle(
@@ -216,7 +216,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             padding: EdgeInsets.all(16),
                             child: Text(
-                              "Sign Up",
+                              "Register",
                               style: TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w400,
@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                           padding: EdgeInsets.all(16),
                           child: Text(
-                            "Sign In",
+                            "Login",
                             style: TextStyle(
                               fontSize: 16,
                               fontWeight: FontWeight.w400,

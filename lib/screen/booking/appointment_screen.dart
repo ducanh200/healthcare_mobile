@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/booking/appointment_detail_screen.dart';
 import 'package:intl/intl.dart';
 import 'package:healthcare/models/booking_list.dart';
@@ -35,6 +36,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       // Error handling is already done in the getProfile method
     }
   }
+
   void _navigateToBookingDetail(int bookingId) {
     Navigator.push(
       context,
@@ -43,6 +45,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -50,7 +53,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         : Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Text(
           'Appointment List',
           style: TextStyle(
@@ -62,9 +65,16 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
-        iconTheme: IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyPage()),
+            );
+          },
+        ),
       ),
-
       body: _buildAppointmentScreen(),
     );
   }
@@ -73,17 +83,14 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
     int? userId = _profileData?['id'];
 
     return FutureBuilder<List<BookingList>>(
-      future: BookingService().getBookingsByPatientId(userId!),
+      future: userId != null ? BookingService().getBookingsByPatientId(userId) : Future.value([]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text("You haven't booked any appointments yet."));
         } else {
           List<BookingList> bookings = snapshot.data!;
-          if (bookings.isEmpty) {
-            return Center(child: Text('No appointments found.'));
-          }
           return ListView.builder(
             itemCount: bookings.length,
             itemBuilder: (context, index) => _buildAppointmentItem(context, bookings[index]),
@@ -106,6 +113,7 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
         : bookingDate == yesterday
         ? 'Yesterday'
         : '${today.difference(bookingDate).inDays} days ago';
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
       child: Container(
@@ -142,15 +150,15 @@ class _AppointmentScreenState extends State<AppointmentScreen> {
                   color: Colors.black,
                 ),
               ),
-          SizedBox(height: 4),
-          Text(
-            daysAgoText,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              color: Colors.black54,
-            ),
-          ),
+              SizedBox(height: 4),
+              Text(
+                daysAgoText,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.black54,
+                ),
+              ),
             ],
           ),
           trailing: Container(

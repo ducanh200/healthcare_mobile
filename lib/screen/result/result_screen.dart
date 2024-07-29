@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:healthcare/models/department.dart';
 import 'package:healthcare/models/result_list.dart';
+import 'package:healthcare/my_page.dart';
 import 'package:healthcare/screen/booking/appointment_detail_screen.dart';
 import 'package:healthcare/screen/result/result_detail.dart';
 import 'package:healthcare/services/department_service.dart';
@@ -40,14 +41,16 @@ class _ResultScreenState extends State<ResultScreen> {
       // Error handling is already done in the getProfile method
     }
   }
-  void _navigateToBookingDetail(int ResultId) {
+
+  void _navigateToBookingDetail(int resultId) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ResultDetailScreen(resultId: ResultId),
+        builder: (context) => ResultDetailScreen(resultId: resultId),
       ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return _isLoading
@@ -55,7 +58,7 @@ class _ResultScreenState extends State<ResultScreen> {
         : Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        automaticallyImplyLeading: true,
         title: Text(
           'Result List',
           style: TextStyle(
@@ -67,28 +70,32 @@ class _ResultScreenState extends State<ResultScreen> {
         ),
         centerTitle: true,
         backgroundColor: Colors.blueAccent,
-        iconTheme: IconThemeData(color: Colors.white),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => MyPage()),
+            );
+          },
+        ),
       ),
-
-      body: _buildAppointmentScreen(),
+      body: _buildResultScreen(),
     );
   }
 
-  Widget _buildAppointmentScreen() {
+  Widget _buildResultScreen() {
     int? userId = _profileData?['id'];
 
     return FutureBuilder<List<ResultList>>(
-      future: ResultService().getResultsByPatientId(userId!),
+      future: userId != null ? ResultService().getResultsByPatientId(userId) : Future.value([]),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
+        } else if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
+          return Center(child: Text("You don't have any results yet."));
         } else {
           List<ResultList> result = snapshot.data!;
-          if (result.isEmpty) {
-            return Center(child: Text('No result found.'));
-          }
           return ListView.builder(
             itemCount: result.length,
             itemBuilder: (context, index) => _buildResultItem(context, result[index]),
@@ -217,6 +224,4 @@ class _ResultScreenState extends State<ResultScreen> {
       ),
     );
   }
-
-
 }
