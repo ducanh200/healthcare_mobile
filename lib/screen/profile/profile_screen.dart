@@ -37,6 +37,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   String formatDate(String dateStr) {
     DateTime date = DateTime.parse(dateStr);
+
+    // Adjust the date to UTC+7
+    date = date.add(Duration(hours: 7));
+
     return DateFormat('dd/MM/yyyy').format(date);
   }
 

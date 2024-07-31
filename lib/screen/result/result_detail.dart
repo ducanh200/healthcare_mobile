@@ -238,7 +238,6 @@ class _ResultDetailScreenState extends State<ResultDetailScreen> {
                                         child: Image.network(test.thumbnail),
                                       ),
                                       SizedBox(height: 16),
-                                      _buildDetailRow('Diagnose', test.diagnose),
                                       _buildDetailRow('Device', test.deviceName),
                                       _buildDetailRow('Expense', '\$${NumberFormat('#,##0').format(test.expense)}'),
                                       _buildDetailRow('Doctor', test.doctorName),

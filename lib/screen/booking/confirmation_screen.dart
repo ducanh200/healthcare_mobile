@@ -166,7 +166,7 @@ class ConfirmationScreen extends StatelessWidget {
                   final department = await DepartmentService.fetchDepartmentById(DepartmentId);
                   maxBooking = department.maxBooking ?? 0;
                   final bookingCountForCurrentDepartment = await BookingService().getBookingCountForDepartment(DateTime.parse(Date.substring(0, 10)), DepartmentId, TimeId);
-                  if (bookingCountForCurrentDepartment <= maxBooking) {
+                  if (bookingCountForCurrentDepartment < maxBooking) {
                     final createdBooking = await BookingService().createBooking(booking);
                     Navigator.push(
                       context,
